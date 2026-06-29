@@ -31,16 +31,17 @@ cargo --version
 echo "=== Adding wasm32 compilation target ==="
 rustup target add wasm32-unknown-unknown
 
-echo "=== Downloading Trunk binary ==="
+echo "=== Downloading Trunk binary (statically linked musl) ==="
 if [ "$ARCH" = "x86_64" ]; then
-    TRUNK_URL="https://github.com/trunk-rs/trunk/releases/download/v0.21.14/trunk-x86_64-unknown-linux-gnu.tar.gz"
+    TRUNK_URL="https://github.com/trunk-rs/trunk/releases/download/v0.21.14/trunk-x86_64-unknown-linux-musl.tar.gz"
 elif [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "arm64" ]; then
-    TRUNK_URL="https://github.com/trunk-rs/trunk/releases/download/v0.21.14/trunk-aarch64-unknown-linux-gnu.tar.gz"
+    TRUNK_URL="https://github.com/trunk-rs/trunk/releases/download/v0.21.14/trunk-aarch64-unknown-linux-musl.tar.gz"
 else
     echo "Unsupported architecture: $ARCH"
     exit 1
 fi
 
+echo "Downloading from: $TRUNK_URL"
 curl -L "$TRUNK_URL" | tar -xzf -
 
 echo "=== Building Frontend with Trunk ==="
