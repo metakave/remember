@@ -45,6 +45,7 @@ echo "Downloading from: $TRUNK_URL"
 curl -L "$TRUNK_URL" | tar -xzf -
 
 echo "=== Building Frontend with Trunk ==="
-./trunk build --release --working-directory frontend
+cd frontend
+../trunk build --release
 
 echo "=== Frontend Build Successful! ==="
