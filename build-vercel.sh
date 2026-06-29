@@ -3,9 +3,25 @@
 # Exit on error
 set -e
 
-echo "=== Installing Rust toolchain ==="
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-source "$HOME/.cargo/env"
+# Configure local writeable Cargo and Rustup paths for Vercel sandbox
+export RUSTUP_HOME="/vercel/.rustup"
+export CARGO_HOME="/vercel/.cargo"
+export PATH="$CARGO_HOME/bin:/rust/bin:$PATH"
+
+echo "=== System Information ==="
+echo "User: $(whoami)"
+echo "Home: $HOME"
+echo "Env Path: $PATH"
+
+echo "=== Checking existing Rust installation ==="
+if command -v rustc &> /dev/null; then
+    echo "rustc version: $(rustc --version)"
+    echo "cargo version: $(cargo --version)"
+fi
+
+# Install rustup locally (overrides the global system read-only Rust if it exists)
+echo "=== Installing local rustup ==="
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
 
 echo "=== Adding wasm32 compilation target ==="
 rustup target add wasm32-unknown-unknown
