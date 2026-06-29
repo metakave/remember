@@ -1,0 +1,7 @@
+/target
+/dist
+/frontend/dist
+goals.db
+goals.db-shm
+goals.db-wal
+.DS_Store
