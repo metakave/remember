@@ -13,6 +13,19 @@ pub enum Tab {
 
 #[component]
 pub fn App() -> impl IntoView {
+    // Current date formatted as "29 June 26"
+    let date = js_sys::Date::new_0();
+    let day = date.get_date();
+    let month_idx = date.get_month() as usize;
+    let year = date.get_full_year() % 100;
+    let months = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+    let month_name = months.get(month_idx).copied().unwrap_or("January");
+    let formatted_str = format!("{} {} {:02}", day, month_name, year);
+    let (formatted_date, _) = create_signal(formatted_str);
+
     // Current Active Tab
     let (active_tab, set_active_tab) = create_signal(Tab::Home);
 
@@ -177,9 +190,14 @@ pub fn App() -> impl IntoView {
             <main class="app-content">
                 {move || match active_tab.get() {
                     Tab::Home => view! {
-                        <div class="dashboard-welcome">
-                            <h2>"Hello, Sadiq"</h2>
-                            <p>"Here is your focus dashboard for today."</p>
+                        <div class="dashboard-welcome" style="display: flex; justify-content: space-between; align-items: flex-end; width: 100%;">
+                            <div>
+                                <h2>"Hello, Sadiq"</h2>
+                                <p>"Here is your focus dashboard for today."</p>
+                            </div>
+                            <div style="font-size: 14px; font-weight: 700; color: var(--accent-primary); font-family: 'Outfit', sans-serif; letter-spacing: 0.5px; padding-bottom: 2px;">
+                                {formatted_date}
+                            </div>
                         </div>
 
                         // Goals Summary
